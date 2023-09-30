@@ -8,31 +8,71 @@ import java.util.Scanner;
 
 public class tsk1floatRequester {
     public static void main(String[] args) {
+        boolean flag = true;
+//        open scanner.
+        Scanner nm = new Scanner(System.in);
 //        eternal cycle
-        while (true) {
-//            open scanner + message for user.
-            Scanner nm = new Scanner(System.in);
-            System.out.printf("Enter the number (using a point for fraction): ");
-//            input of string value.
-            String someValue = nm.next();
-//            cannot close scanner! ----->
-//            nm.close();
-//            output.
-            System.out.println(requester(someValue));
+        String someValue;
+        while (flag) {
+            System.out.printf("Enter the number (using a point or comma for fraction): ");
+            someValue = nm.nextLine();
+            try {
+                if (someValue == null || someValue.isEmpty()){
+                    System.out.println("Empty input is not allowed!");
+                }
+            } catch (Exception e){
+                System.out.println(e.getMessage());
+            }
+            Double temp = requester(someValue);
+//            examination of Double and Float types, Double type stops application execution.
+            if (temp instanceof Double) {
+                System.out.println(requester(someValue));
+                flag = false;
+            } else {
+                System.out.println("Let's try agan!");
+                flag = true;
+            }
         }
+        nm.close();
     }
-    public static Float requester(String value){
+    public static Double requester(String tempValue){
 //        variable initialization.
-        Float number = null;
+        Double number = null;
+        String value = tempValue.replace(',', '.');
 //        try parsing str to float + value return if true.
         try {
-            number = Float.parseFloat(value);
-            return number;
-//         catch exception where parse is unsuccessful.
+//            if string contains point - number float or double.
+            if (value.contains(".") || value.contains(",")) {
+                try {
+                    number = Double.parseDouble(value);
+                    floatDoubleComparator(number);
+                    return number;
+                } catch (TypeNotPresentException e){
+                    System.out.println(e.getMessage());
+                }
+            } else {
+                System.out.println("Number is Integer type or text was entered");
+            }
         } catch (Exception e){
             System.out.println("Incorrect data was entered. Exception: " + e.getMessage());
         }
-//        not sure this return is need.
         return number;
+    }
+    public static void floatDoubleComparator(Double number){
+        double maxPlus;
+        double maxMinus;
+        float pI = 3.4F;
+        int degreePlus = 38;
+        int degreeMinus = -38;
+        int ten = 10;
+        maxPlus = (pI * Math.pow(ten, degreePlus));
+        maxMinus = (pI * Math.pow(ten, degreeMinus));
+
+        if (number <= maxPlus && number >= maxMinus){
+            System.out.println("Number is Float type");
+        } else {
+            System.out.println("Number is type Double, you need to enter " +
+                    "Float type number");
+        }
     }
 }

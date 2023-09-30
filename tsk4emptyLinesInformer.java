@@ -15,7 +15,6 @@ public class tsk4emptyLinesInformer {
                 System.out.println(e.getMessage());
             }
             System.out.println(requester(someValue));
-
         }
     }
     public static Float requester(String value){
